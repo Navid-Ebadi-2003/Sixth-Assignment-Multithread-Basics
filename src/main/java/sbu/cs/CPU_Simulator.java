@@ -20,19 +20,39 @@ import java.util.List;
 public class CPU_Simulator
 {
     public static class Task implements Runnable {
-        long processingTime;
-        String ID;
+        private long processingTime;
+        private String ID;
         public Task(String ID, long processingTime) {
-        // TODO
+
+            this.ID=ID;
+            this.processingTime=processingTime;
         }
 
-    /*
-        Simulate running a task by utilizing the sleep method for the duration of
-        the task's processingTime. The processing time is given in milliseconds.
-    */
+        public long getProcessingTime() {
+            return processingTime;
+        }
+
+        public String getID() {
+            return ID;
+        }
+
+        /*
+                        Simulate running a task by utilizing the sleep method for the duration of
+                        the task's processingTime. The processing time is given in milliseconds.
+                    */
+
         @Override
         public void run() {
-        // TODO
+
+            try {
+                Thread.sleep(processingTime);
+            }
+            catch(InterruptedException e){
+                System.out.println(e);
+            }
+
+
+
         }
     }
 
@@ -44,7 +64,29 @@ public class CPU_Simulator
     public ArrayList<String> startSimulation(ArrayList<Task> tasks) {
         ArrayList<String> executedTasks = new ArrayList<>();
 
-        // TODO
+        int repeat = tasks.size();
+
+        for (int i = 0; i < repeat; i++) {
+            Task shortest = tasks.get(0);
+            for (Task g : tasks) {
+                if (g.getProcessingTime() < shortest.getProcessingTime()) {
+                    shortest = g;
+
+                }
+            }
+
+            Thread T = new Thread(shortest);
+            T.start();
+
+            executedTasks.add(shortest.getID());
+
+            for (int g =0 ; g<tasks.size(); g++){
+                if(shortest.getProcessingTime()==tasks.get(g).getProcessingTime()){
+                    tasks.remove(g);
+                    break;
+                }
+            }
+        }
 
         return executedTasks;
     }
