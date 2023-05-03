@@ -1,5 +1,5 @@
 package sbu.cs;
-
+import java.time.LocalDateTime;
 /*
     In this exercise, you must analyse the following code and use interrupts
     in the main function to terminate threads that run for longer than 3 seconds.
@@ -37,6 +37,9 @@ public class UseInterrupts
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
 
+                    System.out.println(this.getName()+"  has been interrupted");
+                    Thread.currentThread().interrupt();
+                    return;
                 }
                 finally {
                     this.sleepCounter--;
@@ -66,9 +69,16 @@ public class UseInterrupts
         public void run() {
             System.out.println(this.getName() + " is Active.");
 
-            for (int i = 0; i < 10; i += 3)
-            {
+            for (int i = 0; i < 10; i += 3) {
                 i -= this.value;
+                System.out.println(java.time.LocalTime.now());
+
+                if(currentThread().isInterrupted()){
+
+                    System.out.println(this.getName()+"  has been interrupted");
+                    Thread.currentThread().interrupt();
+                    return;
+                }
 
             }
         }
@@ -88,6 +98,20 @@ public class UseInterrupts
         loopThread.start();
 
         // TODO  Check if this thread runs for longer than 3 seconds (if it does, interrupt it)
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+
+        }
+
+        if (sleepThread.isAlive()){
+            sleepThread.interrupt();
+        }
+
+        if(loopThread.isAlive()){
+            loopThread.interrupt();
+        }
 
     }
 }

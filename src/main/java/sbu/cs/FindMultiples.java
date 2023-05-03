@@ -19,10 +19,88 @@ package sbu.cs;
     Use the tests provided in the test folder to ensure your code works correctly.
  */
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 public class FindMultiples
 {
 
-    // TODO create the required multithreading class/classes using your preferred method.
+    public class t3 implements Runnable{
+
+        private int n;
+
+        private ArrayList<Integer> L3 = new ArrayList<Integer>();
+
+        public t3(int n) {
+            this.n = n;
+        }
+
+        public void run(){
+
+            for(int i =1 ; i<=n ; i++){
+                if(i%3 == 0){
+                    L3.add(i);
+                }
+            }
+        }
+
+        public ArrayList<Integer> getL3() {
+            return L3;
+        }
+    }
+
+
+
+
+    public class t5 implements Runnable{
+
+        private int n;
+
+        private ArrayList<Integer> L5 = new ArrayList<Integer>();
+
+        public t5(int n) {
+            this.n = n;
+        }
+
+        public void run(){
+
+            for(int i =1 ; i<=n ; i++){
+                if(i%5 == 0){
+                    L5.add(i);
+                }
+            }
+        }
+
+        public ArrayList<Integer> getL5() {
+            return L5;
+        }
+    }
+
+
+    public class t7 implements Runnable{
+
+        private int n;
+
+         private ArrayList<Integer> L7 = new ArrayList<Integer>();
+
+        public t7(int n) {
+            this.n = n;
+        }
+
+        public void run(){
+
+            for(int i =1 ; i<=n ; i++){
+                if(i%7 == 0){
+                    L7.add(i);
+                }
+            }
+        }
+
+        public ArrayList<Integer> getL7() {
+            return L7;
+        }
+    }
 
 
     /*
@@ -31,8 +109,44 @@ public class FindMultiples
     */
     public int getSum(int n) {
         int sum = 0;
+        ArrayList<Integer> L_all = new ArrayList<Integer>();
 
-        // TODO
+        t3 obj3 = new t3(n);
+        Thread T3 = new Thread(obj3);
+
+        t5 obj5 = new t5(n);
+        Thread T5 = new Thread(obj5);
+
+        t7 obj7 = new t7(n);
+        Thread T7 = new Thread(obj7);
+
+        T3.start();
+        T5.start();
+        T7.start();
+
+        while (T3.isAlive() || T5.isAlive() || T7.isAlive()){
+
+        }
+
+        L_all.addAll(obj3.getL3());
+        L_all.addAll(obj5.getL5());
+        L_all.addAll(obj7.getL7());
+
+//        for (int i =0 ;i < L_all.size();i++){
+//            for(int g = i+1 ; g<L_all.size();g++){
+//                if(L_all.get(i)==L_all.get(g)){
+//                    L_all.remove(i);
+//                }
+//            }
+//        }
+
+        Set<Integer> set = new HashSet<>(L_all);
+        L_all.clear();
+        L_all.addAll(set);
+
+        for (int i : L_all){
+            sum+=i;
+        }
 
         return sum;
     }
